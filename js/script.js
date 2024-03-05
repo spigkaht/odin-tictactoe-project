@@ -1,53 +1,92 @@
-const players = {
-  player1: {
-    marker: "X",
-  },
-  player2: {
-    marker: "O",
-  },
-};
+// IIFE to run gameplay. gamePlay contains all returned functions
+const gamePlay = (() => {
+  // factory function for creating players
+  const players = (name, mark, turn) => {
+    return { name, mark, turn };
+  };
 
-const board = () => {
-  const gameBoard = [];
-  return gameBoard;
-};
+  // create two player objects
+  const player1 = players("player1", "X", true);
+  const player2 = players("player2", "O", false);
 
-const updateBoard = (board, player, marker, square) => {
-  console.log("board: ", board);
-  console.log("player: ", player);
-  console.log("marker: ", marker);
-  console.log("square: ", square);
-};
+  // win combination list
+  const winCombos = [
+    [0, 1, 2],
+    [0, 3, 5],
+    [3, 4, 5],
+    [6, 7, 8],
+    [1, 4, 7],
+    [2, 4, 6],
+    [2, 5, 8],
+    [0, 4, 8],
+  ];
 
-const playerSwitch = (player) => {
-  console.log("player is player1? ", player == "player1");
-};
+  // no winner set
+  let winner = null;
 
-const winConditions = (player) => {};
+  // turn counter???
+  // let turns = 0;
 
-const game = () => {
-  let currPlayer = players.player1;
-  console.log("players: ", players, "player1: ", Object.keys(currPlayer));
-  // need to work out how to switch between player1 and player2
-  // am i using the wrong object/array/constructor type etc? 
-  // using object within object means i don't know how to reference object.key
-  // (ie players.PLAYER1)
-  const gameBoard = board();
+  // board array
+  let gameBoard = [];
 
-  const boardSquares = document.querySelectorAll(".square");
-  boardSquares.forEach((el) => {
-    el.addEventListener("click", (e) => {
-      elClass = e.target.classList;
-      elText = e.target.textContent;
+  // win combination to check against
+  let appliedCombo = [];
 
-      updateBoard(gameBoard, currPlayer, currPlayer.marker, elClass[1]);
-      currPlayer = playerSwitch(currPlayer);
-      winConditions(players);
-    });
-  });
-};
+  const playerTurn = (() => {
+    const boardSquares = document.querySelectorAll(".square");
+    
+  })();
 
-const gameRestart = (players, marker) => {};
+  return {};
+})();
 
-// ---- testing -----
-game();
+// IIFE to run output to screen. outputDisplay contains all returned functions
+const outputDisplay = (() => {
+
+  return {};
+})();
+
+// const updateBoard = (gameBoard, player, squares, square) => {
+//   console.log(player.marker);
+//   updateSquare = [...squares];
+//   updateSquare.forEach((el, index) => {
+//     if (el.classList[1] == square) {
+//       board[index] = player.marker;
+//       const boardSquares = document.querySelectorAll(".square");
+//       boardSquares[index].textContent = player.marker;
+//     }
+//   });
+// };
+
+// const playerSwitch = (player) => {
+//   // console.log("player is player1? ", player.name == "player1");
+// };
+
+// const winConditions = (player) => {};
+
+// const game = () => {
+//   console.log("game started");
+//   let currPlayer = players.player1;
+//   const gameBoard = board();
+
+//   const boardSquares = document.querySelectorAll(".square");
+
+//   console.log(currPlayer);
+
+//   boardSquares.forEach((el) => {
+//     el.addEventListener("click", (e) => {
+//       elClass = e.target.classList;
+//       elText = e.target.textContent;
+
+//       updateBoard(gameBoard, currPlayer, boardSquares, elClass[1]);
+//       currPlayer = playerSwitch(currPlayer);
+//       winConditions(players);
+//     });
+//   });
+// };
+
+// const gameRestart = (players, marker) => {};
+
+// // ---- testing -----
+// game();
