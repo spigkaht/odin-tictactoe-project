@@ -25,7 +25,7 @@ const gamePlay = (() => {
   let winner = null;
 
   // turn counter???
-  // let turns = 0;
+  let turns = 0;
 
   // board array
   let gameBoard = [];
@@ -33,18 +33,104 @@ const gamePlay = (() => {
   // win combination to check against
   let appliedCombo = [];
 
-  const playerTurn = (() => {
+  // run player turns until win conditions met
+  const playerTurns = (() => {
+    // retrieve board squares, loop through each and set event listener
     const boardSquares = document.querySelectorAll(".square");
-    
+    boardSquares.forEach((square) => {
+      square.addEventListener("click", (e) => {
+        // player 1 move based on conditions
+        if (
+          player1.turn == true &&
+          winner == null &&
+          e.target.textContent == ""
+        ) {
+          // add move to array
+          gameBoard[e.target.id] = player1.mark;
+          // add move to board
+          square.textContent = player1.mark;
+          // switch player turns
+          player1.turn = false;
+          player2.turn = true;
+          // player 2 move based on conditions
+        } else if (
+          player2.turn == true &&
+          winner == null &&
+          e.target.textContent == ""
+        ) {
+          // add move to array
+          gameBoard[e.target.id] = player2.mark;
+          // add move to board
+          square.textContent = player2.mark;
+          // switch player turns
+          player1.turn = true;
+          player2.turn = false;
+          // fallback...
+        } else return;
+
+        // check for winner
+        winCheck();
+      });
+    });
   })();
 
-  return {};
+  // check for win conditions
+  winCheck = () => {
+    turns++;
+
+    // build each player's results array to check against win conditions
+    let xPlays = gameBoard.reduce(
+      (array, mark, index) =>
+        mark === player1.mark ? array.concat(index) : array,
+      []
+    );
+    let oPlays = gameBoard.reduce(
+      (array, mark, index) =>
+        mark === player2.mark ? array.concat(index) : array,
+      []
+    );
+
+    // loop over both arrays
+    for (let [index, combo] of winCombos.entries()) {
+      // compare player results array to win combinations array for winner
+      if (combo.every((elem) => xPlays.indexOf(elem) > -1)) {
+        gamePlay.winner = "player 1";
+        gamePlay.winnerCombo = combo;
+      } else if (combo.every((elem) => oPlays.indexOf(elem) > -1)) {
+        gamePlay.winner = "player 2";
+        gamePlay.winnerCombo = combo;
+      } else if (gamePlay.winner == null && turns == 9) {
+        gamePlay.winner = "tie";
+        gamePlay.winnerCombo = combo;
+      }
+    }
+
+    // display winner
+    winDisplay();
+  };
+
+  clearGame = () => {
+    // clear board, arrays etc
+  };
+
+  return {winCheck, clearGame, gameBoard, player1, player2, appliedCombo};
 })();
 
 // IIFE to run output to screen. outputDisplay contains all returned functions
 const outputDisplay = (() => {
+  const winContainer = document.querySelector("#winContainer");
+  // function to display winner
+  winDisplay = () => {
+    if (gamePlay.winner === "player 1") {
+      winContainer.textContent = "X wins this round!";
+    } else if (gamePlay.winner === "player 2") {
+      winContainer.textContent = "O wins this round!";
+    } else if (gamePlay.winner === "tie") {
+      winContainer.textContent = "It's a tie!";
+    } else return;
+  };
 
-  return {};
+  return { winDisplay };
 })();
 
 // const updateBoard = (gameBoard, player, squares, square) => {
